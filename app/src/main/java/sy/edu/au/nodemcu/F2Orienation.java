@@ -18,14 +18,6 @@ import java.util.Arrays;
 
 public class F2Orienation extends Fragment implements SensorEventListener {
 
-    public static float threshold = 15f;
-    public static Long timeThreshold = 1000L;
-
-    private float lassY = 0;
-    private float laxtZ = 0;
-
-    private String command = "stop";
-    private long commandTimeStamp = 0;
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
@@ -82,22 +74,6 @@ public class F2Orienation extends Fragment implements SensorEventListener {
         return rootView;
     }
 
-    public void setCommand(String cmd) {
-        long time = System.currentTimeMillis();
-
-        if (cmd.equals(this.command) && time - commandTimeStamp < timeThreshold)
-            return;
-
-        this.command = cmd;
-        commandTimeStamp = time;
-        Log.d("command", "send command via the wire " + cmd);
-        //send throuhg the wire
-
-    }
-
-    public String getCommand() {
-        return command;
-    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -105,23 +81,9 @@ public class F2Orienation extends Fragment implements SensorEventListener {
         float y = event.values[1];
         float z = event.values[2];
 
-
         Log.d("sensor.v", String.format("x = %03.3f, y = %03.3f, z = %03.3f", x, y, z));
 
-        if (Math.abs(y) >= threshold || Math.abs(z) > threshold) {
-
-            Log.d("sensor", "sensor values: " + Arrays.toString(event.values));
-            if (Math.abs(y) > Math.abs(z)) {
-                setCommand(y > 0 ? "forward" : "backward");
-            } else {
-                setCommand(z > 0 ? "left" : "right");
-            }
-
-        } else {
-            setCommand("stop");
-
-        }
-//        Log.d("suhel", "sensor changed " + event.sensor.getName());
+        MainActivity.command.sensorChanged(x, y, z);
 
 
     }
@@ -135,13 +97,13 @@ public class F2Orienation extends Fragment implements SensorEventListener {
     private void registerSensor() {
         Log.d("suhel", "onstart register sensor listener");
         mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        setCommand("stop");
+        MainActivity.command.setCommand(CommandType.stop);
     }
 
     private void unregisterSensor() {
         Log.d("suhel", "onstop unregister sensor listener");
         mSensorManager.unregisterListener(this);
-        setCommand("stop");
+        MainActivity.command.setCommand(CommandType.stop);
 
     }
 
@@ -163,11 +125,7 @@ public class F2Orienation extends Fragment implements SensorEventListener {
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        registerSensor();
-    }
+
 
     @Override
     public void onStop() {

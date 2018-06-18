@@ -51,6 +51,8 @@ public class F1Main extends Fragment {
 
     public void setIP(TextView vIPl) {
         String url = ((TextView) vIPl).getText().toString();
+        WirelessCommunicator.setIpAddress(url);
+
         Log.d("suhel", "setIP to " + url);
         ((MainActivity)getActivity()).setIpAddress(url);
     }

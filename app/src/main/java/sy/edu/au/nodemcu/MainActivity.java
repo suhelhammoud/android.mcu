@@ -11,16 +11,19 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
-import android.widget.TextView;
+import android.widget.Button;
+
+//import okhttp3.OkHttpClient;
+//import okhttp3.Request;
+//import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static Command command;
 
     public String ipAddress = "http://192.168.1.11";
 
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ViewPager mViewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        command = new Command();
+
 
     }
 
@@ -104,7 +111,9 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     return F2Orienation.of(position);
                 case 2:
-                    return F3Voice.of(position);
+                    return F3Buttons.of(position);
+                case 3:
+                    return F4Voice.of(position);
                 default:
                     return F1Main.of(position);
             }
@@ -113,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
     }
 
