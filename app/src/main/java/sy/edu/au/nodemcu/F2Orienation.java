@@ -19,11 +19,13 @@ import java.util.Arrays;
 public class F2Orienation extends Fragment implements SensorEventListener {
 
     public static float threshold = 15f;
+    public static Long timeThreshold = 1000L;
 
-    private float lassY =0;
+    private float lassY = 0;
     private float laxtZ = 0;
 
-    private String Command = "stop";
+    private String command = "stop";
+    private long commandTimeStamp = 0;
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
@@ -80,13 +82,21 @@ public class F2Orienation extends Fragment implements SensorEventListener {
         return rootView;
     }
 
-    public void setCommand(String command) {
-        Log.d("command", command);
-        Command = command;
+    public void setCommand(String cmd) {
+        long time = System.currentTimeMillis();
+
+        if (cmd.equals(this.command) && time - commandTimeStamp < timeThreshold)
+            return;
+
+        this.command = cmd;
+        commandTimeStamp = time;
+        Log.d("command", "send command via the wire " + cmd);
+        //send throuhg the wire
+
     }
 
     public String getCommand() {
-        return Command;
+        return command;
     }
 
     @Override
@@ -96,7 +106,7 @@ public class F2Orienation extends Fragment implements SensorEventListener {
         float z = event.values[2];
 
 
-        Log.d("sensor.v", String.format("x = %03.3f, y = %03.3f, z = %03.3f", x, y ,z));
+        Log.d("sensor.v", String.format("x = %03.3f, y = %03.3f, z = %03.3f", x, y, z));
 
         if (Math.abs(y) >= threshold || Math.abs(z) > threshold) {
 
@@ -123,22 +133,47 @@ public class F2Orienation extends Fragment implements SensorEventListener {
     }
 
     private void registerSensor() {
+        Log.d("suhel", "onstart register sensor listener");
+        mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        setCommand("stop");
+    }
 
+    private void unregisterSensor() {
+        Log.d("suhel", "onstop unregister sensor listener");
+        mSensorManager.unregisterListener(this);
+        setCommand("stop");
+
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        // Make sure that we are currently visible
+        if (this.isVisible()) {
+            // If we are becoming invisible, then...
+            if (!isVisibleToUser) {
+                Log.d("suhel", "Not visible anymore.  Stopping sensors.");
+                unregisterSensor();
+                // TODO stop audio playback
+            } else {
+                registerSensor();
+            }
+        }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d("suhel", "onstart register sensor listener");
-        mSensorManager.registerListener(this, mSensor, 50000000);
-//        ,SensorManager.SENSOR_DELAY_NORMAL);
+        registerSensor();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d("suhel", "onstop unregister sensor listener");
-        mSensorManager.unregisterListener(this);
-        setCommand("stop");
+        unregisterSensor();
     }
+
+
 }
