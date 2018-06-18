@@ -22,6 +22,8 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
 
+    public static String ipAddress = "http://192.168.1.11";
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
 
