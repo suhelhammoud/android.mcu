@@ -22,7 +22,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
 
-    public static String ipAddress = "http://192.168.1.11";
+    public String ipAddress = "http://192.168.1.11";
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -117,5 +117,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
 
+    public String getIpAddress() {
+        return ipAddress;
+    }
 }

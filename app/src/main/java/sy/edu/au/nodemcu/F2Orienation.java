@@ -1,5 +1,11 @@
 package sy.edu.au.nodemcu;
 
+import android.app.Activity;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -7,9 +13,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
-public class F2Orienation extends Fragment {
+import java.util.Arrays;
+
+public class F2Orienation extends Fragment implements SensorEventListener {
+
+    public static float threshold = 15f;
+
+    private float lassY =0;
+    private float laxtZ = 0;
+
+    private String Command = "stop";
+
+    private SensorManager mSensorManager;
+    private Sensor mSensor;
 
     public static F2Orienation of(int sectionNumber) {
         Log.d("suhel", "F2Orientation of " + sectionNumber);
@@ -21,6 +38,26 @@ public class F2Orienation extends Fragment {
         return fragment;
     }
 
+    void initSensors() {
+
+        int sensorType = Sensor.TYPE_ORIENTATION;
+        Log.d("suhel", "init sensor of type : " + sensorType);
+//        int sensorType = Sensor.TYPE_GYROSCOPE;
+//        int sensorType = Sensor.TYPE_MOTION_DETECT;
+
+        mSensorManager = (SensorManager) ((Activity) getActivity())
+                .getSystemService(Context.SENSOR_SERVICE);
+
+
+        if (mSensorManager.getDefaultSensor(sensorType) != null) {
+            // Success! There's a gyroscope.
+            Log.d("suhel", "there's a gyroscope");
+            mSensor = mSensorManager.getSensorList(sensorType).get(0);
+
+        } else {
+            Log.e("suhel", "Found no sensor of type : " + sensorType);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,11 +70,75 @@ public class F2Orienation extends Fragment {
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = MainActivity.ipAddress;
+                String url = ((MainActivity) getActivity()).getIpAddress();
                 Log.i("suhel", "btnPrint was clicked");
                 Log.i("suhel", "new ip address to " + url);
             }
         });
+
+        initSensors();
         return rootView;
+    }
+
+    public void setCommand(String command) {
+        Log.d("command", command);
+        Command = command;
+    }
+
+    public String getCommand() {
+        return Command;
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float x = event.values[0];
+        float y = event.values[1];
+        float z = event.values[2];
+
+
+        Log.d("sensor.v", String.format("x = %03.3f, y = %03.3f, z = %03.3f", x, y ,z));
+
+        if (Math.abs(y) >= threshold || Math.abs(z) > threshold) {
+
+            Log.d("sensor", "sensor values: " + Arrays.toString(event.values));
+            if (Math.abs(y) > Math.abs(z)) {
+                setCommand(y > 0 ? "forward" : "backward");
+            } else {
+                setCommand(z > 0 ? "left" : "right");
+            }
+
+        } else {
+            setCommand("stop");
+
+        }
+//        Log.d("suhel", "sensor changed " + event.sensor.getName());
+
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        Log.d("suhel", "onAccuracyChanged, sensor "
+                + sensor.toString() + ", accuracy = " + accuracy);
+    }
+
+    private void registerSensor() {
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("suhel", "onstart register sensor listener");
+        mSensorManager.registerListener(this, mSensor, 50000000);
+//        ,SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("suhel", "onstop unregister sensor listener");
+        mSensorManager.unregisterListener(this);
+        setCommand("stop");
     }
 }
