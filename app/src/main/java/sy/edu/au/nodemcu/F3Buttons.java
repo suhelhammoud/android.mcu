@@ -16,8 +16,6 @@ public class F3Buttons extends Fragment implements View.OnTouchListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.f3_buttons, container, false);
-//        TextView textView = (TextView) rootView.findViewById(R.id.lbl);
-//        textView.setText(getString(R.string.section_format, getArguments().getInt("sn")));
 
         rootView.findViewById(R.id.btnStop)
                 .setOnTouchListener(this);
@@ -85,6 +83,6 @@ public class F3Buttons extends Fragment implements View.OnTouchListener {
 
         }
 
-        return false;
+        return true;
     }
 }

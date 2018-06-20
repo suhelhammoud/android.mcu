@@ -31,13 +31,16 @@ public class Command {
     private CommandType currentCommand = CommandType.stop;
     private long commandTimeStamp = 0;
 
-    private boolean isConnected = false;
+    private boolean isConnected = true;
 
     public void setConnected(boolean connected) {
+        if(!connected)
+            WirelessCommunicator.sendCommand(CommandType.stop.val());
         isConnected = connected;
     }
 
-    public void sensorChanged(float x, float y, float z) {
+    public CommandType sensorChanged(float x, float y, float z) {
+
         if (Math.abs(y) >= threshold || Math.abs(z) > threshold) {
 
             Log.d("sensor", "sensor values: " + Arrays.toString(new float[]{x, y, z}));
@@ -53,6 +56,7 @@ public class Command {
 
         }
 //        Log.d("suhel", "sensor changed " + event.sensor.getName());
+        return this.currentCommand;
 
     }
 

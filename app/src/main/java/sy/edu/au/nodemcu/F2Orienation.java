@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.Arrays;
 
@@ -21,6 +22,7 @@ public class F2Orienation extends Fragment implements SensorEventListener {
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
+    private TextView lblCaption;
 
     public static F2Orienation of(int sectionNumber) {
         Log.d("suhel", "F2Orientation of " + sectionNumber);
@@ -53,6 +55,10 @@ public class F2Orienation extends Fragment implements SensorEventListener {
         }
     }
 
+    public void setCaption(String msg) {
+        lblCaption.setText(msg);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,13 +70,15 @@ public class F2Orienation extends Fragment implements SensorEventListener {
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = ((MainActivity) getActivity()).getIpAddress();
+                String url = WirelessCommunicator.getIpAddress();
                 Log.i("suhel", "btnPrint was clicked");
                 Log.i("suhel", "new ip address to " + url);
             }
         });
 
         initSensors();
+
+        lblCaption = (TextView) rootView.findViewById(R.id.lblOrientationOut);
         return rootView;
     }
 
@@ -83,7 +91,8 @@ public class F2Orienation extends Fragment implements SensorEventListener {
 
         Log.d("sensor.v", String.format("x = %03.3f, y = %03.3f, z = %03.3f", x, y, z));
 
-        MainActivity.command.sensorChanged(x, y, z);
+        CommandType resultCommand = MainActivity.command.sensorChanged(x, y, z);
+        lblCaption.setText(resultCommand.toString());
 
 
     }
@@ -104,7 +113,7 @@ public class F2Orienation extends Fragment implements SensorEventListener {
         Log.d("suhel", "onstop unregister sensor listener");
         mSensorManager.unregisterListener(this);
         MainActivity.command.setCommand(CommandType.stop);
-
+        setCaption("STOP");
     }
 
 
@@ -124,7 +133,6 @@ public class F2Orienation extends Fragment implements SensorEventListener {
             }
         }
     }
-
 
 
     @Override

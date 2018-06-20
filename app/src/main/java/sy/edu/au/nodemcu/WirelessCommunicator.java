@@ -1,18 +1,25 @@
 package sy.edu.au.nodemcu;
 
+import android.util.Log;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.ResponseHandlerInterface;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URI;
+import java.net.URL;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.HttpResponse;
 
 public class WirelessCommunicator {
 
-    private static String ipAddress = "http://192.168.1.30/";
+    private static String ipAddress = "http://192.168.1.103:3000/";
 
+    /*
     final private static ResponseHandlerInterface responseHandler = new ResponseHandlerInterface() {
         @Override
         public void sendResponseMessage(HttpResponse response) throws IOException {
@@ -114,19 +121,26 @@ public class WirelessCommunicator {
 
         }
     };
-
+    */
     public static void setIpAddress(String ipAddress) {
-        WirelessCommunicator.ipAddress = ipAddress.endsWith("/")? ipAddress: ipAddress + "/";
+        WirelessCommunicator.ipAddress = ipAddress.endsWith("/") ? ipAddress : ipAddress + "/";
     }
 
     public static String getIpAddress() {
         return ipAddress;
     }
 
-    private static AsyncHttpClient client = new AsyncHttpClient();
+//    private static AsyncHttpClient client = new AsyncHttpClient();
+
+//    public static void sendCommand2(String command) {
+//        client.get(ipAddress + command, responseHandler);
+//    }
 
     public static void sendCommand(String command) {
-        client.get(ipAddress + command, responseHandler);
+        Log.d("suhel", "sendCommand (" + command + ")");
+        String url = ipAddress + command;
+        new HttpGetRequest().execute(url);
+//        httpGetRequest.doInBackground(url);
     }
 
 }

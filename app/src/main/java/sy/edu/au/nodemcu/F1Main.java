@@ -23,18 +23,19 @@ public class F1Main extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.f1_main, container, false);
 
-        TextView textIP = (TextView) rootView.findViewById(R.id.txtIP);
+        final TextView textIP = (TextView) rootView.findViewById(R.id.txtIP);
+        textIP.setText(WirelessCommunicator.getIpAddress());
 
-        textIP.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    Log.d("suhel", "txtIP has lost focus");
-                    setIP((TextView) v);
-                }
-
-            }
-        });
+//        textIP.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus) {
+//                    Log.d("suhel", "txtIP has lost focus");
+//                    setIP((TextView) v);
+//                }
+//
+//            }
+//        });
 //        textView.setText(getString(R.string.section_format, getArguments().getInt("sn")));
 
         Button btnSetIP = (Button) rootView.findViewById(R.id.btnSetIp);
@@ -42,20 +43,20 @@ public class F1Main extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("suhel", "btnSetIP was clicked");
-                setIP((TextView) rootView.findViewById(R.id.txtIP));
+                WirelessCommunicator.setIpAddress(textIP.getText().toString());
 
             }
         });
         return rootView;
     }
 
-    public void setIP(TextView vIPl) {
-        String url = ((TextView) vIPl).getText().toString();
-        WirelessCommunicator.setIpAddress(url);
-
-        Log.d("suhel", "setIP to " + url);
-        ((MainActivity)getActivity()).setIpAddress(url);
-    }
+//    public void setIP(TextView vIPl) {
+//        String url = ((TextView) vIPl).getText().toString();
+//        WirelessCommunicator.setIpAddress(url);
+//
+//        Log.d("suhel", "setIP to " + url);
+//        WirelessCommunicator.setIpAddress(url);
+//    }
 
 
     public static F1Main of(int sectionNumber) {
