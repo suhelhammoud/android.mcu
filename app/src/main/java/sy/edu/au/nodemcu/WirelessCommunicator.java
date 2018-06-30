@@ -5,7 +5,7 @@ import android.util.Log;
 
 public class WirelessCommunicator {
 
-    private static String ipAddress = "http://192.168.1.103:3000/";
+    private static String ipAddress = "http://192.168.1.40";
 
 
     public static void setIpAddress(String ipAddress) {

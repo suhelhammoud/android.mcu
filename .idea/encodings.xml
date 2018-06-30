@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/androidTest/java/armeabi-v7a" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ai/kitt/snowboy/SnowboyDetect.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ai/kitt/snowboy/SnowboyVad.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ai/kitt/snowboy/snowboyJNI.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/sy/edu/au/nodemcu/AppResCopy.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/sy/edu/au/nodemcu/Constants.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/sy/edu/au/nodemcu/Demo.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/sy/edu/au/nodemcu/MsgEnum.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/sy/edu/au/nodemcu/audio/AudioDataReceivedListener.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/sy/edu/au/nodemcu/audio/AudioDataSaver.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/sy/edu/au/nodemcu/audio/PlaybackThread.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/sy/edu/au/nodemcu/audio/RecordingThread.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/main.xml" charset="ISO-8859-1" />
+  </component>
+</project>
