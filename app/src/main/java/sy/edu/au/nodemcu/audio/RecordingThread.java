@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import sy.edu.au.nodemcu.Constants;
+import sy.edu.au.nodemcu.VConstants;
 import sy.edu.au.nodemcu.MsgEnum;
 import ai.kitt.snowboy.SnowboyDetect;
 
@@ -21,18 +21,20 @@ public class RecordingThread {
 
     private static final String TAG = RecordingThread.class.getSimpleName();
 
-    private static final String ACTIVE_RES = Constants.ACTIVE_RES;
-    private static final String ACTIVE_UMDL = Constants.ACTIVE_UMDL;
+    private static final String ACTIVE_RES = VConstants.ACTIVE_RES;
+    private static final String ACTIVE_UMDL = VConstants.ACTIVE_UMDL;
     
     private boolean shouldContinue;
     private AudioDataReceivedListener listener = null;
     private Handler handler = null;
     private Thread thread;
     
-    private static String strEnvWorkSpace = Constants.DEFAULT_WORK_SPACE;
-    private String activeModel = strEnvWorkSpace+ACTIVE_UMDL;
+    private static String strEnvWorkSpace = VConstants.DEFAULT_WORK_SPACE;
+//    private String activeModel = strEnvWorkSpace+ACTIVE_UMDL;
+    private String activeModel = VConstants.activeModel();
     private String commonRes = strEnvWorkSpace+ACTIVE_RES;
-    
+
+
     private SnowboyDetect detector = new SnowboyDetect(commonRes, activeModel);
     private MediaPlayer player = new MediaPlayer();
 
@@ -40,7 +42,10 @@ public class RecordingThread {
         this.handler = handler;
         this.listener = listener;
 
-        detector.SetSensitivity("0.6");
+        Log.i("suhel", "activeModel :" + activeModel);
+//        Log.i("suhel", "activeModel2 :" + activeModel2);
+
+        detector.SetSensitivity(VConstants.sensitivity("0.6"));
         detector.SetAudioGain(1);
         detector.ApplyFrontend(true);
         try {
@@ -85,15 +90,15 @@ public class RecordingThread {
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
 
         // Buffer size in bytes: for 0.1 second of audio
-        int bufferSize = (int)(Constants.SAMPLE_RATE * 0.1 * 2);
+        int bufferSize = (int)(VConstants.SAMPLE_RATE * 0.1 * 2);
         if (bufferSize == AudioRecord.ERROR || bufferSize == AudioRecord.ERROR_BAD_VALUE) {
-            bufferSize = Constants.SAMPLE_RATE * 2;
+            bufferSize = VConstants.SAMPLE_RATE * 2;
         }
 
         byte[] audioBuffer = new byte[bufferSize];
         AudioRecord record = new AudioRecord(
             MediaRecorder.AudioSource.DEFAULT,
-            Constants.SAMPLE_RATE,
+            VConstants.SAMPLE_RATE,
             AudioFormat.CHANNEL_IN_MONO,
             AudioFormat.ENCODING_PCM_16BIT,
             bufferSize);

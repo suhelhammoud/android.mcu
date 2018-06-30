@@ -16,7 +16,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
 
-import sy.edu.au.nodemcu.Constants;
+import sy.edu.au.nodemcu.VConstants;
 
 public class PlaybackThread {
     private static final String TAG = PlaybackThread.class.getSimpleName();
@@ -66,7 +66,7 @@ public class PlaybackThread {
 
     public short[] readPCM() {
         try {
-            File recordFile = new File(Constants.SAVE_AUDIO);
+            File recordFile = new File(VConstants.SAVE_AUDIO);
             InputStream inputStream = new FileInputStream(recordFile);
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             DataInputStream dataInputStream = new DataInputStream(bufferedInputStream);
@@ -97,7 +97,7 @@ public class PlaybackThread {
 
         audioTrack = new AudioTrack(
                 AudioManager.STREAM_MUSIC,
-                Constants.SAMPLE_RATE,
+                VConstants.SAMPLE_RATE,
                 AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
                 bufferSizeInBytes,

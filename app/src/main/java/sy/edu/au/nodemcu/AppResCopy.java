@@ -9,7 +9,7 @@ import java.io.InputStream;
 
 public class AppResCopy {
     private final static String TAG = AppResCopy.class.getSimpleName();
-    private static String envWorkSpace = Constants.DEFAULT_WORK_SPACE;
+    private static String envWorkSpace = VConstants.DEFAULT_WORK_SPACE;
 
     private static void copyFilesFromAssets(Context context, String assetsSrcDir, String sdcardDstDir, boolean override) {
         try {
@@ -60,6 +60,6 @@ public class AppResCopy {
     }
 
     public static void copyResFromAssetsToSD(Context context) {
-        copyFilesFromAssets(context, Constants.ASSETS_RES_DIR, envWorkSpace+"/", true);
+        copyFilesFromAssets(context, VConstants.ASSETS_RES_DIR, envWorkSpace+"/", true);
     }
 }

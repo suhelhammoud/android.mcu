@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import sy.edu.au.nodemcu.Constants;
+import sy.edu.au.nodemcu.VConstants;
 
 public class AudioDataSaver implements AudioDataReceivedListener {
 
@@ -32,8 +32,8 @@ public class AudioDataSaver implements AudioDataReceivedListener {
     private DataOutputStream dataOutputStreamInstance = null;
 
     public AudioDataSaver() {
-        saveFile = new File(Constants.SAVE_AUDIO);
-        Log.e(TAG, Constants.SAVE_AUDIO);
+        saveFile = new File(VConstants.SAVE_AUDIO);
+        Log.e(TAG, VConstants.SAVE_AUDIO);
     }
 
     @Override

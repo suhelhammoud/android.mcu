@@ -8,6 +8,8 @@
 
 package ai.kitt.snowboy;
 
+import android.util.Log;
+
 public class SnowboyDetect {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
@@ -37,6 +39,8 @@ public class SnowboyDetect {
 
   public SnowboyDetect(String resource_filename, String model_str) {
     this(snowboyJNI.new_SnowboyDetect(resource_filename, model_str), true);
+    Log.i("suhel", "resource : " + resource_filename);
+    Log.i("suhel", "model : " + model_str);
   }
 
   public boolean Reset() {
