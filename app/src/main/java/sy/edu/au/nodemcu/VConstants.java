@@ -8,18 +8,22 @@ public class VConstants {
 
     public static String[] models = {
 //            "alexa",
-            "left",
-            "right",
-            "forward",
-            "backward",
-            "stop"
+            "left"
+//            "right",
+//            "forward",
+//            "backward",
+//            "stop"
     };
+
+    public static String activeModel(String model) {
+        return DEFAULT_WORK_SPACE + "commands/" + model + ".pmdl";
+    }
 
     public static String activeModel() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < models.length; i++) {
             String model = models[i];
-            sb.append(DEFAULT_WORK_SPACE + "commands/" +  model + ".pmdl");
+            sb.append(activeModel(model));
             if (i < models.length - 1) {
                 sb.append(", ");
             }
@@ -28,7 +32,7 @@ public class VConstants {
         return sb.toString();
     }
 
-    public static String sensitivity(String level){
+    public static String sensitivity(String level) {
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < models.length; i++) {

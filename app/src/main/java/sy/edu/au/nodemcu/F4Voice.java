@@ -33,33 +33,20 @@ public class F4Voice extends Fragment {
     private static long activeTimes = 0;
 
     private RecordingThread recordingThread;
-    private PlaybackThread playbackThread;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.f4_voice, container, false);
-//        TextView textView = (TextView) rootView.findViewById(R.id.lbl);
-//        textView.setText(getString(R.string.section_format, getArguments().getInt("sn")));
-//        Button btn = (Button) rootView.findViewById(R.id.btnStartActivity);
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent myIntent = new Intent(getContext(), Demo.class);
-//                startActivity(myIntent);
-//
-//            }
-//        });
-//        setContentView(R.layout.main);
         setUI();
 
         setProperVolume();
 
-        AppResCopy.copyResFromAssetsToSD(getActivity());
+//        AppResCopy.copyResFromAssetsToSD(getActivity());
 
         activeTimes = 0;
-        recordingThread = new RecordingThread(handle, new AudioDataSaver());
-        playbackThread = new PlaybackThread();
+        recordingThread = new RecordingThread(handle,
+                VConstants.activeModel("left"));
         Log.i("suhel", "alexa activity created");
         return rootView;
     }
@@ -117,27 +104,13 @@ public class F4Voice extends Fragment {
     private void startRecording() {
         recordingThread.startRecording();
         updateLog(" ----> recording started ...", "green");
-        record_button.setText("Stop");
     }
 
     private void stopRecording() {
         recordingThread.stopRecording();
         updateLog(" ----> recording stopped ", "green");
-        record_button.setText("Start");
     }
 
-    private void startPlayback() {
-        updateLog(" ----> playback started ...", "green");
-        play_button.setText("Stop");
-        // (new PcmPlayer()).playPCM();
-        playbackThread.startPlayback();
-    }
-
-    private void stopPlayback() {
-        updateLog(" ----> playback stopped ", "green");
-        play_button.setText("Play");
-        playbackThread.stopPlayback();
-    }
 
     private void sleep() {
         try {
@@ -149,27 +122,16 @@ public class F4Voice extends Fragment {
     private View.OnClickListener record_button_handle = new View.OnClickListener() {
         // @Override
         public void onClick(View arg0) {
-            if (record_button.getText().equals("Start")) {
-                stopPlayback();
-                sleep();
-                startRecording();
-            } else {
-                stopRecording();
-                sleep();
-            }
+            sleep();
+            startRecording();
         }
     };
 
     private View.OnClickListener play_button_handle = new View.OnClickListener() {
         // @Override
         public void onClick(View arg0) {
-            if (play_button.getText().equals("Play")) {
                 stopRecording();
                 sleep();
-                startPlayback();
-            } else {
-                stopPlayback();
-            }
         }
     };
 
@@ -181,7 +143,7 @@ public class F4Voice extends Fragment {
             switch (message) {
                 case MSG_ACTIVE:
                     activeTimes++;
-                    updateLog(" ----> Detected " + activeTimes + " times", "green");
+                    updateLog(" ----> Detected " + activeTimes + " times, "+ msg.obj , "green");
                     // Toast.makeText(Demo.this, "Active "+activeTimes, Toast.LENGTH_SHORT).show();
                     showToast("Active " + activeTimes);
                     break;
@@ -258,6 +220,33 @@ public class F4Voice extends Fragment {
         strLog = null;
         log.setText("");
     }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        // Make sure that we are currently visible
+        if (this.isVisible()) {
+            // If we are becoming invisible, then...
+            if (!isVisibleToUser) {
+                Log.d("suhel", "Not visible anymore.  Stopping recording.");
+                recordingThread.stopRecording();
+                // TODO stop audio playback
+            } else {
+                Log.d("suhel", " visible user visible fragment.");
+
+            }
+        }
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        recordingThread.stopRecording();
+    }
+
 
     @Override
     public void onDestroy() {
