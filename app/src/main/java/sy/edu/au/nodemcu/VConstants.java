@@ -1,18 +1,23 @@
 package sy.edu.au.nodemcu;
 
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 
 public class VConstants {
 
     public static String[] models = {
-//            "alexa",
-            "left"
-//            "right",
-//            "forward",
-//            "backward",
-//            "stop"
+            "left",
+            "right",
+            "forward",
+            "backward",
+            "stop",
+            "one",
+            "two",
+            "three",
+            "four",
+            "five"
 
     };
 
@@ -26,24 +31,26 @@ public class VConstants {
             String model = models[i];
             sb.append(activeModel(model));
             if (i < models.length - 1) {
-                sb.append(", ");
+                sb.append(",");
             }
 
         }
+        Log.d("suhel", "activeModels : " + sb.toString());
         return sb.toString();
     }
 
-    public static String sensitivity(String level) {
+    public static String sensitivity(float level) {
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < models.length; i++) {
 
-            sb.append(level);
+            sb.append(Float.valueOf(level + i * 0.01f));
             if (i < models.length - 1) {
-                sb.append(", ");
+                sb.append(",");
             }
 
         }
+        Log.d("suhel", "sensitivity : " + sb.toString());
         return sb.toString();
 //        return "0.5";
     }

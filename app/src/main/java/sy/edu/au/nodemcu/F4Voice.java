@@ -45,8 +45,7 @@ public class F4Voice extends Fragment {
 //        AppResCopy.copyResFromAssetsToSD(getActivity());
 
         activeTimes = 0;
-        recordingThread = new RecordingThread(handle,
-                VConstants.activeModel("left"));
+        recordingThread = new RecordingThread(handle);
         Log.i("suhel", "alexa activity created");
         return rootView;
     }

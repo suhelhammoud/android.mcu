@@ -39,7 +39,6 @@ public class RecordingThread {
     private SnowboyDetect detector = null;
     private MediaPlayer player = new MediaPlayer();
 
-    private String commandMessage = null;
 
 
     public RecordingThread(Handler handler) {
@@ -47,14 +46,13 @@ public class RecordingThread {
     }
 
     public RecordingThread(Handler handler, String activeModel) {
-        commandMessage = activeModel;
         this.handler = handler;
 
         detector = new SnowboyDetect(commonRes, activeModel);
         Log.i("suhel", "activeModel :" + activeModel);
 //        Log.i("suhel", "activeModel2 :" + activeModel2);
 
-        detector.SetSensitivity(VConstants.sensitivity("0.5" ));
+        detector.SetSensitivity(VConstants.sensitivity(0.49f));
         detector.SetAudioGain(1);
         detector.ApplyFrontend(true);
         try {
@@ -144,8 +142,8 @@ public class RecordingThread {
                 // post a higher CPU usage:
                 // sendMessage(MsgEnum.MSG_VAD_SPEECH, null);
             } else if (result > 0) {
-                sendMessage(MsgEnum.MSG_ACTIVE, commandMessage);
-                Log.i("Snowboy: ", "Hotword " + Integer.toString(result) + " detected! " + commandMessage);
+                sendMessage(MsgEnum.MSG_ACTIVE, VConstants.models[result-1]);
+                Log.i("Snowboy: ", "Hotword " + Integer.toString(result) + " detected! " + VConstants.models[result-1]);
                 player.start();
             }
         }
