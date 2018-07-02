@@ -16,28 +16,25 @@ import sy.edu.au.nodemcu.VConstants;
 import sy.edu.au.nodemcu.MsgEnum;
 import ai.kitt.snowboy.SnowboyDetect;
 
+import sy.edu.au.nodemcu.VModels;
 public class RecordingThread {
     static {
         System.loadLibrary("snowboy-detect-android");
     }
 
-    private static final String TAG = RecordingThread.class.getSimpleName();
-
     private static final String ACTIVE_RES = VConstants.ACTIVE_RES;
-    private static final String ACTIVE_UMDL = VConstants.ACTIVE_UMDL;
 
     private boolean shouldContinue;
     private Handler handler = null;
     private Thread thread;
 
     private static String strEnvWorkSpace = VConstants.DEFAULT_WORK_SPACE;
-    //    private String activeModel = strEnvWorkSpace+ACTIVE_UMDL;
-    private String activeModel = VConstants.activeModel();
     private String commonRes = strEnvWorkSpace + ACTIVE_RES;
 
 
     private SnowboyDetect detector = null;
-    private MediaPlayer player = new MediaPlayer();
+    private MediaPlayer player = null;
+    private MediaPlayer sPlayer = null;
 
 
 
@@ -49,8 +46,11 @@ public class RecordingThread {
         this.handler = handler;
 
         detector = new SnowboyDetect(commonRes, activeModel);
+
+        player = new MediaPlayer();
+        sPlayer = new MediaPlayer();
+
         Log.i("suhel", "activeModel :" + activeModel);
-//        Log.i("suhel", "activeModel2 :" + activeModel2);
 
         detector.SetSensitivity(VConstants.sensitivity(0.49f));
         detector.SetAudioGain(1);
@@ -59,7 +59,7 @@ public class RecordingThread {
             player.setDataSource(strEnvWorkSpace + "ding.wav");
             player.prepare();
         } catch (IOException e) {
-            Log.e(TAG, "Playing ding sound error", e);
+            Log.e("suhel", "Playing ding sound error", e);
         }
     }
 
@@ -93,7 +93,7 @@ public class RecordingThread {
     }
 
     private void record() {
-        Log.v(TAG, "Start");
+        Log.v("suhel", "Start Recording");
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
 
         // Buffer size in bytes: for 0.1 second of audio
@@ -111,12 +111,12 @@ public class RecordingThread {
                 bufferSize);
 
         if (record.getState() != AudioRecord.STATE_INITIALIZED) {
-            Log.e(TAG, "Audio Record can't initialize!");
+            Log.e("suhel", "Audio Record can't initialize!");
             return;
         }
         record.startRecording();
 
-        Log.v(TAG, "Start recording");
+        Log.v("suhel", "Start recording");
 
         long shortsRead = 0;
         detector.Reset();
@@ -142,8 +142,8 @@ public class RecordingThread {
                 // post a higher CPU usage:
                 // sendMessage(MsgEnum.MSG_VAD_SPEECH, null);
             } else if (result > 0) {
-                sendMessage(MsgEnum.MSG_ACTIVE, VConstants.models[result-1]);
-                Log.i("Snowboy: ", "Hotword " + Integer.toString(result) + " detected! " + VConstants.models[result-1]);
+                sendMessage(MsgEnum.MSG_ACTIVE, VModels.get(result-1));
+                Log.i("suhel", "Hotword " + Integer.toString(result) + " detected! " + VModels.get(result-1).name());
                 player.start();
             }
         }
@@ -152,6 +152,6 @@ public class RecordingThread {
         record.release();
 
 
-        Log.v(TAG, String.format("Recording stopped. Samples read: %d", shortsRead));
+        Log.v("suhel", String.format("Recording stopped. Samples read: %d", shortsRead));
     }
 }

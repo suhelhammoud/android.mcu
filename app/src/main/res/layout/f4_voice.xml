@@ -20,7 +20,7 @@
             android:id="@+id/btn_test2"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:text="Play"
+            android:text="Stop"
             android:layout_weight="1">
         </Button>
     </LinearLayout>

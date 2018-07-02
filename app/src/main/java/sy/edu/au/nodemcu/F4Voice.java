@@ -1,7 +1,6 @@
 package sy.edu.au.nodemcu;
 
 import android.content.Context;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +8,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +17,17 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import sy.edu.au.nodemcu.audio.AudioDataSaver;
-import sy.edu.au.nodemcu.audio.PlaybackThread;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
 import sy.edu.au.nodemcu.audio.RecordingThread;
 
 public class F4Voice extends Fragment {
     private View rootView;
-    private Button record_button;
-    private Button play_button;
+    private Button start_button;
+    private Button stop_button;
+
     private TextView log;
     private ScrollView logView;
     static String strLog = null;
@@ -42,11 +45,9 @@ public class F4Voice extends Fragment {
 
         setProperVolume();
 
-//        AppResCopy.copyResFromAssetsToSD(getActivity());
-
         activeTimes = 0;
         recordingThread = new RecordingThread(handle);
-        Log.i("suhel", "alexa activity created");
+        Log.i("suhel", "F4Voice Fragment created");
         return rootView;
     }
 
@@ -55,13 +56,14 @@ public class F4Voice extends Fragment {
     }
 
     private void setUI() {
-        record_button = (Button) rootView.findViewById(R.id.btn_test1);
-        record_button.setOnClickListener(record_button_handle);
-        record_button.setEnabled(true);
+        start_button = (Button) rootView.findViewById(R.id.btn_test1);
+        start_button.setOnClickListener(start_button_handle);
+        start_button.setEnabled(true);
 
-        play_button = (Button) rootView.findViewById(R.id.btn_test2);
-        play_button.setOnClickListener(play_button_handle);
-        play_button.setEnabled(true);
+        stop_button = (Button) rootView.findViewById(R.id.btn_test2);
+        stop_button.setOnClickListener(stop_button_handle);
+        stop_button.setEnabled(true);
+        stop_button.setText("Stop");
 
         log = (TextView) rootView.findViewById(R.id.log);
         logView = (ScrollView) rootView.findViewById(R.id.logView);
@@ -102,12 +104,15 @@ public class F4Voice extends Fragment {
 
     private void startRecording() {
         recordingThread.startRecording();
-        updateLog(" ----> recording started ...", "green");
+        updateLog(" ----> recognition started ...", "green");
+        start_button.setEnabled(false);
     }
 
     private void stopRecording() {
         recordingThread.stopRecording();
-        updateLog(" ----> recording stopped ", "green");
+        updateLog(" ----> recognition stopped ", "green");
+        start_button.setEnabled(true);
+
     }
 
 
@@ -118,7 +123,7 @@ public class F4Voice extends Fragment {
         }
     }
 
-    private View.OnClickListener record_button_handle = new View.OnClickListener() {
+    private View.OnClickListener start_button_handle = new View.OnClickListener() {
         // @Override
         public void onClick(View arg0) {
             sleep();
@@ -126,14 +131,36 @@ public class F4Voice extends Fragment {
         }
     };
 
-    private View.OnClickListener play_button_handle = new View.OnClickListener() {
+    private View.OnClickListener stop_button_handle = new View.OnClickListener() {
         // @Override
         public void onClick(View arg0) {
-                stopRecording();
-                sleep();
+            stopRecording();
+            sleep();
+            emptyLog();
         }
     };
 
+    protected int duration = VModels.one.duration(); //milliseconds
+
+    Timer timer = new Timer();
+
+    public void handleVoiceCommand(VModels vcommand) {
+        Log.i("suhel", "handle voice command : " + vcommand);
+        if (vcommand.isDuration()) {
+            duration = vcommand.duration();
+            return;
+        }
+
+        MainActivity.command.setCommand(vcommand.commandType());
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                MainActivity.command.setCommand(CommandType.stop);
+            }
+        }, duration);
+
+    }
 
     public Handler handle = new Handler() {
         @Override
@@ -142,8 +169,9 @@ public class F4Voice extends Fragment {
             switch (message) {
                 case MSG_ACTIVE:
                     activeTimes++;
-                    updateLog(" ----> Detected " + activeTimes + " times, "+ msg.obj , "green");
+                    updateLog(" ----> Detected " + activeTimes + " times, " + msg.obj, "green");
                     // Toast.makeText(Demo.this, "Active "+activeTimes, Toast.LENGTH_SHORT).show();
+                    handleVoiceCommand((VModels) msg.obj);
                     showToast("Active " + activeTimes);
                     break;
                 case MSG_INFO:
@@ -230,7 +258,8 @@ public class F4Voice extends Fragment {
             // If we are becoming invisible, then...
             if (!isVisibleToUser) {
                 Log.d("suhel", "Not visible anymore.  Stopping recording.");
-                recordingThread.stopRecording();
+//                recordingThread.stopRecording();
+                stopRecording();
                 // TODO stop audio playback
             } else {
                 Log.d("suhel", " visible user visible fragment.");
@@ -242,15 +271,15 @@ public class F4Voice extends Fragment {
 
     @Override
     public void onStop() {
+        stopRecording();
         super.onStop();
-        recordingThread.stopRecording();
     }
 
 
     @Override
     public void onDestroy() {
         restoreVolume();
-        recordingThread.stopRecording();
+        stopRecording();
         super.onDestroy();
     }
 

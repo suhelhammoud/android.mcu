@@ -5,21 +5,21 @@ import android.util.Log;
 
 import java.io.File;
 
+
 public class VConstants {
 
-    public static String[] models = {
-            "left",
-            "right",
-            "forward",
-            "backward",
-            "stop",
-            "one",
-            "two",
-            "three",
-            "four",
-            "five"
-
-    };
+//    public static String[] models = {
+//            "five",
+//            "four",
+//            "two",
+//            "one",
+//            "three",
+//            "forward",
+//            "backward",
+//            "right",
+//            "left",
+//            "stop",
+//    };
 
     public static String activeModel(String model) {
         return DEFAULT_WORK_SPACE + "commands/" + model + ".pmdl";
@@ -27,10 +27,10 @@ public class VConstants {
 
     public static String activeModel() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < models.length; i++) {
-            String model = models[i];
+        for (int i = 0; i < VModels.length; i++) {
+            String model = VModels.get(i).name();
             sb.append(activeModel(model));
-            if (i < models.length - 1) {
+            if (i < VModels.length - 1) {
                 sb.append(",");
             }
 
@@ -42,10 +42,10 @@ public class VConstants {
     public static String sensitivity(float level) {
 
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < models.length; i++) {
+        for (int i = 0; i < VModels.length; i++) {
 
             sb.append(Float.valueOf(level + i * 0.01f));
-            if (i < models.length - 1) {
+            if (i < VModels.length - 1) {
                 sb.append(",");
             }
 
