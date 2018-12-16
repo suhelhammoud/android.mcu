@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            Log.d("suhel", "getItem " + position);
+            Log.d("ahmad", "getItem " + position);
             switch (position) {
                 case 0:
                     return F1Main.of(position);

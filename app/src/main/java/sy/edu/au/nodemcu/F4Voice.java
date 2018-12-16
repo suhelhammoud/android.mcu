@@ -47,7 +47,7 @@ public class F4Voice extends Fragment {
 
         activeTimes = 0;
         recordingThread = new RecordingThread(handle);
-        Log.i("suhel", "F4Voice Fragment created");
+        Log.i("ahmad", "F4Voice Fragment created");
         return rootView;
     }
 
@@ -145,7 +145,7 @@ public class F4Voice extends Fragment {
     Timer timer = new Timer();
 
     public void handleVoiceCommand(VModels vcommand) {
-        Log.i("suhel", "handle voice command : " + vcommand);
+        Log.i("ahmad", "handle voice command : " + vcommand);
         if (vcommand.isDuration()) {
             duration = vcommand.duration();
             return;
@@ -257,12 +257,12 @@ public class F4Voice extends Fragment {
         if (this.isVisible()) {
             // If we are becoming invisible, then...
             if (!isVisibleToUser) {
-                Log.d("suhel", "Not visible anymore.  Stopping recording.");
+                Log.d("ahmad", "Not visible anymore.  Stopping recording.");
 //                recordingThread.stopRecording();
                 stopRecording();
                 // TODO stop audio playback
             } else {
-                Log.d("suhel", " visible user visible fragment.");
+                Log.d("ahmad", " visible user visible fragment.");
 
             }
         }
@@ -284,7 +284,7 @@ public class F4Voice extends Fragment {
     }
 
     public static F4Voice of(int sectionNumber) {
-        Log.d("suhel", "F4Voice of " + sectionNumber);
+        Log.d("ahmad", "F4Voice of " + sectionNumber);
 
         F4Voice fragment = new F4Voice();
         Bundle args = new Bundle();

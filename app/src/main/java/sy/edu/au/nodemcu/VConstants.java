@@ -35,7 +35,7 @@ public class VConstants {
             }
 
         }
-        Log.d("suhel", "activeModels : " + sb.toString());
+        Log.d("ahmad", "activeModels : " + sb.toString());
         return sb.toString();
     }
 
@@ -50,7 +50,7 @@ public class VConstants {
             }
 
         }
-        Log.d("suhel", "sensitivity : " + sb.toString());
+        Log.d("ahmad", "sensitivity : " + sb.toString());
         return sb.toString();
 //        return "0.5";
     }

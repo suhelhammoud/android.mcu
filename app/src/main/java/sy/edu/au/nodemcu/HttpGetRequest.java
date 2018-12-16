@@ -48,7 +48,7 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
             result = stringBuilder.toString();
         }
         catch(IOException e){
-            Log.e("suhel", "Exception");
+            Log.e("ahmad", "Exception");
             e.printStackTrace();
             result = null;
         }
@@ -56,6 +56,6 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
     }
     protected void onPostExecute(String result){
         super.onPostExecute(result);
-        Log.d("suhel.async", "onPostExecute result =" + result);
+        Log.d("ahmad.async", "onPostExecute result =" + result);
     }
 }

@@ -30,7 +30,7 @@ public class F1Main extends Fragment {
 //            @Override
 //            public void onFocusChange(View v, boolean hasFocus) {
 //                if (hasFocus) {
-//                    Log.d("suhel", "txtIP has lost focus");
+//                    Log.d("ahmad", "txtIP has lost focus");
 //                    setIP((TextView) v);
 //                }
 //
@@ -42,7 +42,7 @@ public class F1Main extends Fragment {
         btnSetIP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("suhel", "btnSetIP was clicked");
+                Log.d("ahmad", "btnSetIP was clicked");
                 WirelessCommunicator.setIpAddress(textIP.getText().toString());
 
             }
@@ -54,13 +54,13 @@ public class F1Main extends Fragment {
 //        String url = ((TextView) vIPl).getText().toString();
 //        WirelessCommunicator.setIpAddress(url);
 //
-//        Log.d("suhel", "setIP to " + url);
+//        Log.d("ahmad", "setIP to " + url);
 //        WirelessCommunicator.setIpAddress(url);
 //    }
 
 
     public static F1Main of(int sectionNumber) {
-        Log.d("suhel", "F1Main of " + sectionNumber);
+        Log.d("ahmad", "F1Main of " + sectionNumber);
         F1Main fragment = new F1Main();
         Bundle args = new Bundle();
         args.putInt("sn", sectionNumber);

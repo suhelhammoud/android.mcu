@@ -62,7 +62,7 @@ public class F3Buttons extends Fragment implements View.OnTouchListener {
     }
 
     public static F3Buttons of(int sectionNumber) {
-        Log.d("suhel", "F3Buttons of " + sectionNumber);
+        Log.d("ahmad", "F3Buttons of " + sectionNumber);
 
         F3Buttons fragment = new F3Buttons();
         Bundle args = new Bundle();
@@ -92,20 +92,20 @@ public class F3Buttons extends Fragment implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.d("suhel", "touch button " + event.getAction());
+        Log.d("ahmad", "touch button " + event.getAction());
         CommandType cmd = getCommandType(v.getId());
 
         switch (event.getAction()) {
 
 
             case MotionEvent.ACTION_DOWN:
-                Log.d("suhel", "press " + cmd);
+                Log.d("ahmad", "press " + cmd);
                 MainActivity.command.setCommand(cmd);
                 v.setBackgroundColor(COLOR_PRESSED);
                 break;
 
             case MotionEvent.ACTION_UP:
-                Log.d("suhel", "release " + cmd);
+                Log.d("ahmad", "release " + cmd);
                 MainActivity.command.setCommand(CommandType.stop);
                 v.setBackgroundColor(COLOR_RELEASED);
                 break;

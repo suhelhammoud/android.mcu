@@ -25,7 +25,7 @@ public class F2Orienation extends Fragment implements SensorEventListener {
     private TextView lblCaption;
 
     public static F2Orienation of(int sectionNumber) {
-        Log.d("suhel", "F2Orientation of " + sectionNumber);
+        Log.d("ahmad", "F2Orientation of " + sectionNumber);
 
         F2Orienation fragment = new F2Orienation();
         Bundle args = new Bundle();
@@ -37,7 +37,7 @@ public class F2Orienation extends Fragment implements SensorEventListener {
     void initSensors() {
 
         int sensorType = Sensor.TYPE_ORIENTATION;
-        Log.d("suhel", "init sensor of type : " + sensorType);
+        Log.d("ahmad", "init sensor of type : " + sensorType);
 //        int sensorType = Sensor.TYPE_GYROSCOPE;
 //        int sensorType = Sensor.TYPE_MOTION_DETECT;
 
@@ -47,11 +47,11 @@ public class F2Orienation extends Fragment implements SensorEventListener {
 
         if (mSensorManager.getDefaultSensor(sensorType) != null) {
             // Success! There's a gyroscope.
-            Log.d("suhel", "there's a gyroscope");
+            Log.d("ahmad", "there's a gyroscope");
             mSensor = mSensorManager.getSensorList(sensorType).get(0);
 
         } else {
-            Log.e("suhel", "Found no sensor of type : " + sensorType);
+            Log.e("ahmad", "Found no sensor of type : " + sensorType);
         }
     }
 
@@ -71,8 +71,8 @@ public class F2Orienation extends Fragment implements SensorEventListener {
             @Override
             public void onClick(View v) {
                 String url = WirelessCommunicator.getIpAddress();
-                Log.i("suhel", "btnPrint was clicked");
-                Log.i("suhel", "new ip address to " + url);
+                Log.i("ahmad", "btnPrint was clicked");
+                Log.i("ahmad", "new ip address to " + url);
             }
         });
 
@@ -99,18 +99,18 @@ public class F2Orienation extends Fragment implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        Log.d("suhel", "onAccuracyChanged, sensor "
+        Log.d("ahmad", "onAccuracyChanged, sensor "
                 + sensor.toString() + ", accuracy = " + accuracy);
     }
 
     private void registerSensor() {
-        Log.d("suhel", "onstart register sensor listener");
+        Log.d("ahmad", "onstart register sensor listener");
         mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         MainActivity.command.setCommand(CommandType.stop);
     }
 
     private void unregisterSensor() {
-        Log.d("suhel", "onstop unregister sensor listener");
+        Log.d("ahmad", "onstop unregister sensor listener");
         mSensorManager.unregisterListener(this);
         MainActivity.command.setCommand(CommandType.stop);
         setCaption("STOP");
@@ -125,7 +125,7 @@ public class F2Orienation extends Fragment implements SensorEventListener {
         if (this.isVisible()) {
             // If we are becoming invisible, then...
             if (!isVisibleToUser) {
-                Log.d("suhel", "Not visible anymore.  Stopping sensors.");
+                Log.d("ahmad", "Not visible anymore.  Stopping sensors.");
                 unregisterSensor();
                 // TODO stop audio playback
             } else {

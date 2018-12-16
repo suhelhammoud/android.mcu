@@ -18,7 +18,7 @@ public class WirelessCommunicator {
 
 
     public static void sendCommand(String command) {
-        Log.d("suhel", "sendCommand (" + command + ")");
+        Log.d("ahmad", "sendCommand (" + command + ")");
         String url = ipAddress + command;
         new HttpGetRequest().execute(url);
     }

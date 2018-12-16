@@ -50,7 +50,7 @@ public class RecordingThread {
         player = new MediaPlayer();
         sPlayer = new MediaPlayer();
 
-        Log.i("suhel", "activeModel :" + activeModel);
+        Log.i("ahmad", "activeModel :" + activeModel);
 
         detector.SetSensitivity(VConstants.sensitivity(0.49f));
         detector.SetAudioGain(1);
@@ -59,7 +59,7 @@ public class RecordingThread {
             player.setDataSource(strEnvWorkSpace + "ding.wav");
             player.prepare();
         } catch (IOException e) {
-            Log.e("suhel", "Playing ding sound error", e);
+            Log.e("ahmad", "Playing ding sound error", e);
         }
     }
 
@@ -93,7 +93,7 @@ public class RecordingThread {
     }
 
     private void record() {
-        Log.v("suhel", "Start Recording");
+        Log.v("ahmad", "Start Recording");
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
 
         // Buffer size in bytes: for 0.1 second of audio
@@ -111,12 +111,12 @@ public class RecordingThread {
                 bufferSize);
 
         if (record.getState() != AudioRecord.STATE_INITIALIZED) {
-            Log.e("suhel", "Audio Record can't initialize!");
+            Log.e("ahmad", "Audio Record can't initialize!");
             return;
         }
         record.startRecording();
 
-        Log.v("suhel", "Start recording");
+        Log.v("ahmad", "Start recording");
 
         long shortsRead = 0;
         detector.Reset();
@@ -143,7 +143,7 @@ public class RecordingThread {
                 // sendMessage(MsgEnum.MSG_VAD_SPEECH, null);
             } else if (result > 0) {
                 sendMessage(MsgEnum.MSG_ACTIVE, VModels.get(result-1));
-                Log.i("suhel", "Hotword " + Integer.toString(result) + " detected! " + VModels.get(result-1).name());
+                Log.i("ahmad", "Hotword " + Integer.toString(result) + " detected! " + VModels.get(result-1).name());
                 player.start();
             }
         }
@@ -152,6 +152,6 @@ public class RecordingThread {
         record.release();
 
 
-        Log.v("suhel", String.format("Recording stopped. Samples read: %d", shortsRead));
+        Log.v("ahmad", String.format("Recording stopped. Samples read: %d", shortsRead));
     }
 }
